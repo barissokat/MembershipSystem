@@ -13,7 +13,12 @@ namespace MembershipSystem.Controllers
         // GET: Membership
         public ActionResult Index()
         {
-            return View();
+            var users = _db.Users.Select(u => new User
+            {
+                Id = u.Id,
+                Name = u.UserName
+            }).ToList();
+            return View(users);
         }
 
         public ActionResult CreateUser()
