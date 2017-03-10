@@ -97,5 +97,16 @@ namespace MembershipSystem.Controllers
             };
             return View("DetailsUser", user);
         }
+
+        public ActionResult FindUserById(string id)
+        {
+            var userInfo = UserManager.FindById(id);
+            var user = new User
+            {
+                Id = userInfo.Id,
+                Name = userInfo.UserName
+            };
+            return View("DetailsUser", user);
+        }
     }
 }
