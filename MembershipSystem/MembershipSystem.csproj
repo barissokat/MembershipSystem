@@ -269,6 +269,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Membership\CreateUser.cshtml" />
     <Content Include="Views\Membership\Index.cshtml" />
+    <Content Include="Views\Membership\EditUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

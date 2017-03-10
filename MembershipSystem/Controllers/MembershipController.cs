@@ -40,5 +40,41 @@ namespace MembershipSystem.Controllers
             }
             return View();
         }
+
+        public ActionResult EditUser(string id)
+        {
+            var users = (from u in _db.Users
+                         where u.Id == id
+                         select new User
+                         {
+                             Id = u.Id,
+                             Name = u.UserName
+                         });
+            if (users.Count() == 0)
+                return RedirectToAction("Index");
+
+            var user = users.FirstOrDefault();
+            return View(user);
+        }
+
+        [HttpPost]
+        public ActionResult EditUser(User user)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var oldUser = _db.Users.Where(u => u.Id == user.Id).FirstOrDefault();
+                    oldUser.UserName = user.Name;
+                    _db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception)
+                {
+                    return this.EditUser(user.Id);
+                }
+            }
+            return View();
+        }
     }
 }
