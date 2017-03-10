@@ -270,6 +270,7 @@
     <Content Include="Views\Membership\CreateUser.cshtml" />
     <Content Include="Views\Membership\Index.cshtml" />
     <Content Include="Views\Membership\EditUser.cshtml" />
+    <Content Include="Views\Membership\FindUserByName.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

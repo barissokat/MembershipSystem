@@ -1,4 +1,6 @@
 ﻿using MembershipSystem.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,6 +78,24 @@ namespace MembershipSystem.Controllers
                 }
             }
             return View();
+        }
+
+        UserManager<ApplicationUser> UserManager { get; set; }
+
+        public MembershipController()
+        {
+            UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+        }
+
+        public ActionResult FindUserByName(string id)
+        {
+            var userInfo = UserManager.FindByName(id);
+            var user = new User
+            {
+                Id = userInfo.Id,
+                Name = userInfo.UserName
+            };
+            return View("DetailsUser", user);
         }
     }
 }
