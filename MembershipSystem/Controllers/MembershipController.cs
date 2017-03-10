@@ -37,6 +37,7 @@ namespace MembershipSystem.Controllers
                 };
                 _db.Users.Add(user);
                 _db.SaveChanges();
+                return RedirectToAction("Index");
             }
             return View();
         }
