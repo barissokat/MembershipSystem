@@ -108,5 +108,43 @@ namespace MembershipSystem.Controllers
             };
             return View("DetailsUser", user);
         }
+
+        public ActionResult PasswordForUser(string id)
+        {
+            bool passwordControl = UserManager.HasPassword(id);
+            if (passwordControl == false)
+            {
+                ApplicationUser userInfo = UserManager.FindById(id);
+                var user = new UserPassword
+                {
+                    Id = userInfo.Id,
+                    Name = userInfo.UserName
+                };
+                return View(user);
+            }
+            else
+                return this.FindUserById(id);
+        }
+
+        [HttpPost]
+        public ActionResult PasswordForUser(string id, FormCollection password)
+        {
+            if (ModelState.IsValid)
+            {
+                bool passwordControl = UserManager.HasPassword(id);
+                if (passwordControl == false && password["Password"] == password["Password2"])
+                {
+                    var result = UserManager.AddPassword(id, password["Password"]);
+                    if (result.Succeeded)
+                        return this.FindUserById(id);
+                    else
+                        return this.PasswordForUser(id);
+                }
+                else
+                    return this.PasswordForUser(id);
+            }
+            else
+                return this.PasswordForUser(id);
+        }
     }
 }
