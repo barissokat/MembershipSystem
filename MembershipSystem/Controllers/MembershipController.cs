@@ -146,5 +146,57 @@ namespace MembershipSystem.Controllers
             else
                 return this.PasswordForUser(id);
         }
+        
+        public ActionResult ChangePassword(string id, FormCollection password)
+        {
+            if (ModelState.IsValid)
+            {
+                bool passwordControl = UserManager.HasPassword(id);
+                if (passwordControl == true)
+                {
+                    if (password["NewPassword"] == password["NewPassword2"])
+                    {
+                        var result = UserManager.ChangePassword(id, password["OldPassword"], password["NewPassword"]);
+                        if (result.Succeeded)
+                            return this.FindUserById(id);
+                        else
+                            return this.ChangePassword(id, password);
+                    }
+                    else
+                        return this.ChangePassword(id, password);
+                }
+                else
+                    return this.FindUserById(id);
+            }
+            else
+                return this.ChangePassword(id, password);
+        }
+
+        /*id ler sorunlu*/
+        [HttpPost]
+        public ActionResult ChangePassword(ChangePassword password)
+        {
+            if (ModelState.IsValid)
+            {
+                bool passwordControl = UserManager.HasPassword(password.Id);
+                if (passwordControl == true)
+                {
+                    if (password.NewPassword == password.NewPassword2)
+                    {
+                        var result = UserManager.ChangePassword(password.Id, password.OldPassword, password.NewPassword);
+                        if (result.Succeeded)
+                            return this.FindUserById(password.Id);
+                        else
+                            return ChangePassword(id);
+                    }
+                    else
+                        return ChangePassword(id);
+                }
+                else
+                    return this.FindUserById(password.Id);
+            }
+            else
+                return ChangePassword(id);
+        }
     }
 }
