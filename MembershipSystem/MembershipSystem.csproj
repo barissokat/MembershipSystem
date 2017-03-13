@@ -204,6 +204,7 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ChangePassword.cs" />
+    <Compile Include="Models\CreateNewPassword.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\User.cs" />
@@ -275,6 +276,7 @@
     <Content Include="Views\Membership\DetailsUser.cshtml" />
     <Content Include="Views\Membership\PasswordForUser.cshtml" />
     <Content Include="Views\Membership\ChangePassword.cshtml" />
+    <Content Include="Views\Membership\CreateNewPassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -114,7 +114,7 @@ namespace MembershipSystem.Controllers
             bool passwordControl = UserManager.HasPassword(id);
             if (passwordControl == false)
             {
-                ApplicationUser userInfo = UserManager.FindById(id);
+                var userInfo = UserManager.FindById(id);
                 var user = new UserPassword
                 {
                     Id = userInfo.Id,
@@ -138,15 +138,34 @@ namespace MembershipSystem.Controllers
                     if (result.Succeeded)
                         return this.FindUserById(id);
                     else
-                        return this.PasswordForUser(id);
+                        return View(password);
                 }
                 else
                     return this.PasswordForUser(id);
             }
             else
-                return this.PasswordForUser(id);
+                return View(password);
+        }
+
+        public ActionResult ChangePassword(string id)
+        {
+            bool passwordControl = UserManager.HasPassword(id);
+            if (passwordControl == true)
+            {
+                var userInfo = UserManager.FindById(id);
+                var user = new UserPassword
+                {
+                    Id = userInfo.Id,
+                    Name = userInfo.UserName
+                };
+                return View(user);
+            }
+            else
+                return this.FindUserById(id);
+
         }
         
+        [HttpPost]
         public ActionResult ChangePassword(string id, FormCollection password)
         {
             if (ModelState.IsValid)
@@ -154,49 +173,71 @@ namespace MembershipSystem.Controllers
                 bool passwordControl = UserManager.HasPassword(id);
                 if (passwordControl == true)
                 {
-                    if (password["NewPassword"] == password["NewPassword2"])
+                    if (password["Password"] == password["Password2"])
                     {
-                        var result = UserManager.ChangePassword(id, password["OldPassword"], password["NewPassword"]);
+                        var result = UserManager.ChangePassword(id, password["Password"], password["Password2"]);
                         if (result.Succeeded)
                             return this.FindUserById(id);
                         else
-                            return this.ChangePassword(id, password);
+                            return View();
                     }
                     else
-                        return this.ChangePassword(id, password);
+                        return View();
                 }
                 else
                     return this.FindUserById(id);
             }
             else
-                return this.ChangePassword(id, password);
+                return View();
         }
 
-        /*id ler sorunlu*/
+        public ActionResult CreateNewPassword(string id)
+        {
+            var userInfo = UserManager.FindById(id);
+            var user = new CreateNewPassword
+            {
+                Id = userInfo.Id,
+                Name = userInfo.UserName
+            };
+            return View(user);
+        }
+
+
         [HttpPost]
-        public ActionResult ChangePassword(ChangePassword password)
+        public ActionResult CreateNewPassword(string id, FormCollection user)
         {
             if (ModelState.IsValid)
             {
-                bool passwordControl = UserManager.HasPassword(password.Id);
+                bool passwordControl = UserManager.HasPassword(id);
                 if (passwordControl == true)
                 {
-                    if (password.NewPassword == password.NewPassword2)
+                    if (user["NewPassword"] == user["NewPassword2"])
                     {
-                        var result = UserManager.ChangePassword(password.Id, password.OldPassword, password.NewPassword);
-                        if (result.Succeeded)
-                            return this.FindUserById(password.Id);
+                        var resultDelete = UserManager.RemovePassword(id);
+                        if (resultDelete.Succeeded)
+                        {
+                            var resultAdd = UserManager.AddPassword(id, user["NewPassword"]);
+                            if (resultAdd.Succeeded)
+                                return this.FindUserById(id);
+                            else
+                                return this.CreateNewPassword(id);
+                        }
                         else
-                            return ChangePassword(id);
+                            return this.CreateNewPassword(id);
                     }
                     else
-                        return ChangePassword(id);
+                        return this.CreateNewPassword(id);
                 }
                 else
-                    return this.FindUserById(password.Id);
+                {
+                    var resultAdd = UserManager.AddPassword(id, user["NewPassword"]);
+                    if (resultAdd.Succeeded)
+                        return this.FindUserById(id);
+                    return this.CreateNewPassword(id);
+                }
             }
             else
-                return ChangePassword(id);
+                return this.CreateNewPassword(id);
         }
     }
 }
