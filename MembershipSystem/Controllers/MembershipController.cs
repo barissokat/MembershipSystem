@@ -153,7 +153,7 @@ namespace MembershipSystem.Controllers
             if (passwordControl == true)
             {
                 var userInfo = UserManager.FindById(id);
-                var user = new UserPassword
+                var user = new ChangePassword
                 {
                     Id = userInfo.Id,
                     Name = userInfo.UserName
@@ -173,9 +173,9 @@ namespace MembershipSystem.Controllers
                 bool passwordControl = UserManager.HasPassword(id);
                 if (passwordControl == true)
                 {
-                    if (password["Password"] == password["Password2"])
+                    if (password["NewPassword"] == password["NewPassword"])
                     {
-                        var result = UserManager.ChangePassword(id, password["Password"], password["Password2"]);
+                        var result = UserManager.ChangePassword(id, password["NewPassword"], password["NewPassword"]);
                         if (result.Succeeded)
                             return this.FindUserById(id);
                         else

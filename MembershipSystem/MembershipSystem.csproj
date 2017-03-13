@@ -275,8 +275,8 @@
     <Content Include="Views\Membership\EditUser.cshtml" />
     <Content Include="Views\Membership\DetailsUser.cshtml" />
     <Content Include="Views\Membership\PasswordForUser.cshtml" />
-    <Content Include="Views\Membership\ChangePassword.cshtml" />
     <Content Include="Views\Membership\CreateNewPassword.cshtml" />
+    <Content Include="Views\Membership\ChangePassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
